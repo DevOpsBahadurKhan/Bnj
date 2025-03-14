@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #273032;
+            color: #F2F2F2;
+        }
+
+        .navbar {
+            background-color: #273032;
+            padding: 15px 20px;
+        }
+
+        .navbar .btn {
+            color: white;
+            border: 1px solid #F2954D;
+            border-radius: 8px;
+        }
+
+        .navbar .btn:hover {
+            background-color: #F2954D;
+            color: #162023;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: #273032;
+            border-radius: 8px;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .form-container {
+            margin-top: 40px;
+            padding: 20px;
+            background: #162023;
+            border-radius: 8px;
+        }
+
+        .fixed-bottom-btns {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #273032;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none">
+                <img src="/fullstack/assets/backbtn.svg" alt="Back" style="width: 48px; height: 48px;">
+            </a>
+            <h5 class="ms-5 text-start flex-grow-1">Health Survey</h5>
+            <button class="btn">Submit</button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="progress-container">
+            <div class="d-flex justify-content-between m-1">
+                <span>Survey Progress</span>
+                <span>15 Questions</span>
+            </div>
+            <div class="progress w-100">
+                <div class="progress-bar bg-warning" style="width: 10%;"></div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h4 id="question-text">Q.1</h4>
+            <b>What is the name of respondent.</b>
+            <input type="text" class="form-control mt-3" id="answer-input" placeholder="Your answer...">
+        </div>
+        <div class="fixed-bottom-btns text-center">
+            <div class="container d-flex justify-content-between">
+                <button class="btn btn-secondary" id="prev-btn" disabled>Previous</button>
+                <button class="btn btn-primary" id="next-btn">Next</button>
+            </div>
+        </div>
+    </div>
+
+  
+
+</body>
+</html>
