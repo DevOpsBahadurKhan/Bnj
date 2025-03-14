@@ -1,0 +1,244 @@
+/* Feature Card Styling */
+.feature-card {
+    perspective: 1000px;
+    height: 300px;
+}
+
+.feature-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.feature-card:hover .feature-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Front and Back Styling */
+.feature-card-front,
+.feature-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Front Side */
+.feature-card-front {
+    background: #4CAF50;
+    /* Light Green */
+}
+
+/* Back Side */
+.feature-card-back {
+    background: #000957;
+    transform: rotateY(180deg);
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .feature-card {
+        height: 250px;
+    }
+}
+
+
+
+/* Banner Section */
+.banner-section {
+    background: #9cbad0;
+    padding: 80px 0;
+}
+
+/* Banner Title */
+.banner-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #213555;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+/* Banner Subtitle */
+.banner-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 20px;
+    animation: fadeInUp 1.2s ease-in-out;
+}
+
+/* Banner Button */
+.banner-btn {
+    background-color: #28a745;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    transition: background 0.3s ease-in-out;
+}
+
+.banner-btn:hover {
+    background-color: #218838;
+}
+
+/* Banner Image */
+.banner-img {
+    max-width: 100%;
+    height: auto;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Fade-in Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .banner-title {
+        font-size: 2rem;
+    }
+
+    .banner-subtitle {
+        font-size: 1rem;
+    }
+
+    .banner-btn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+}
+
+
+
+
+
+/* Portfolio Card */
+.portfolio-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.portfolio-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Image Styling */
+.portfolio-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Overlay Effect */
+.portfolio-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #3B6790;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Show Overlay on Hover */
+.portfolio-card:hover .portfolio-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .portfolio-overlay {
+        padding: 15px;
+    }
+}
+
+
+
+.image-reel-container {
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    width: 100%;
+    background: #f8f9fa;
+    padding: 20px 0;
+}
+
+.image-reel {
+    display: flex;
+    gap: 20px;
+    animation: scroll 15s linear infinite;
+}
+
+.image-reel img {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+/* Hover pe animation stop */
+.image-reel-container:hover .image-reel {
+    animation-play-state: paused;
+}
+
+
+
+
+
+
+
+
+.bg-light-green {
+    background-color: #5162ff !important;
+    /* Light green primary color */
+}
+
+.footer a:hover {
+    text-decoration: underline;
+    color: #FFD700;
+    /* Gold hover effect */
+}
+
+.social-icons a {
+    transition: transform 0.3s ease-in-out;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+}
