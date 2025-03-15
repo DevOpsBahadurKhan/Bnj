@@ -684,6 +684,23 @@ body{
 .owl-item.active .single-slider .button{
     animation: fadeInDown 1s both 1.5s;
 }
+.top-link li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.top-link li a img {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* 🚀 Hover Effect: Scale + Color Change + Glow */
+.top-link li a:hover img {
+    transform: scale(1.2);
+    filter: brightness(1.3) sepia(1) hue-rotate(180deg) saturate(2);
+}
+.top-link li a:hover img[src*="fb.svg"] {
+    filter: brightness(1.2) drop-shadow(0 0 5px #1877F2); /* Facebook Blue */
+}
 /*===========================
 	End Hero Area CSS
 =============================*/
@@ -4198,3 +4215,29 @@ body{
     font-size: 16px;
 }
 
+a {
+    list-style: none;
+    text-decoration: none !important;
+    color: inherit; /* Ensures it doesn't take default link colors */
+	color: rgb(18, 17, 17);
+}
+
+
+
+.shiny-gold {
+    background: linear-gradient(45deg, #FFD700, #FFCC00, #DAA520, #FFD700);
+    background-size: 400% 400%;
+    animation: goldShine 3s infinite linear;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+@keyframes goldShine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
