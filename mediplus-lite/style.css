@@ -251,7 +251,7 @@ body{
 }
 /* Topbar */
 .header .topbar{
-	background-color:#fff;
+	background-color:#ffffff;
 	border-bottom:1px solid #eee;
 }
 .header .topbar{
@@ -263,12 +263,14 @@ body{
 .header .top-link li{
 	display:inline-block;
 	margin-right:15px;
+    position: relative;
+    padding: 0 10px; /* Adds equal left and right margin */
 }
 .header .top-link li:last-child{
 	margin-right:0px;
 }
 .header .top-link li a{
-	color:#2C2D3F;
+	color:#0026ff;
 	font-size:14px;
 	font-weight:400;
 }
@@ -4170,3 +4172,29 @@ body{
 /*=========================
 	End Footer CSS
 ===========================*/
+
+.top-link {
+    display: flex;
+    justify-content: center; /* Centers icons */
+    align-items: center;
+    gap: 8px; /* Space between items */
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+}
+
+.top-link li {
+    display: inline-block;
+    position: relative;
+    padding: 0 10px; /* Adds equal left and right margin */
+}
+
+.top-link li:not(:last-child)::after {
+    content: "|";
+    position: absolute;
+    right: -10px; /* Moves the pipe to create spacing */
+    color: #333; /* Adjust color */
+    font-size: 16px;
+}
+
