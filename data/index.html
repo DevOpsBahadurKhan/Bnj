@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A4 (ST12) Address Label (100mm x 48mm x 12)</title>
+
+  <style>
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      @page {
+        size: 210mm 297mm; /* Fixed A4 size */
+        margin: 0;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .sheet {
+      width: 210mm; /* Fixed A4 width */
+      height: 297mm; /* Fixed A4 height */
+      display: grid;
+      box-sizing: border-box;
+    }
+
+    .label {
+      border: 0.2mm dashed #ccc;
+      position: relative;
+      overflow: hidden;
+      padding: 2mm; /* Adds 1.5mm margin around the image inside the label */
+      box-sizing: border-box; /* Ensures padding doesn't increase label size */
+    }
+
+    .label img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .upload-input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .no-print {
+      margin: 10px;
+      text-align: center;
+    }
+
+    .form-container {
+      margin: 20px;
+    }
+
+    .form-container label {
+      display: block;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <div class="form-container">
+      <label>Label Height (mm): <input type="number" id="labelHeight" value="48" min="1" step="0.1"></label>
+      <label>Label Width (mm): <input type="number" id="labelWidth" value="100" min="1" step="0.1"></label>
+      <label>Number Across: <input type="number" id="numAcross" value="2" min="1"></label>
+      <label>Number Down: <input type="number" id="numDown" value="6" min="1"></label>
+      <label>Top Margin (mm): <input type="number" id="topMargin" value="2.7" min="1" step="0.1"></label>
+      <label>Side Margin (mm): <input type="number" id="sideMargin" value="3" min="0" step="0.1"></label>
+      <label>Bottom Margin (mm): <input type="number" id="bottomMargin" value="2.5" min="1" step="0.1"></label>
+      <label>Vertical Pitch (mm): <input type="number" id="verticalPitch" value="47" min="1" step="0.1"></label>
+      <label>Horizontal Pitch (mm): <input type="number" id="horizontalPitch" value="102" min="1" step="0.1"></label>
+      <label>Label Name: <input type="text" id="labelName" value="ST12"></label>
+      <label>Upload All Images: <input type="file" id="uploadAll" multiple accept="image/*"></label>
+      <button onclick="generateSheet()">Generate Sheet</button>
+      <button onclick="window.print()">🖨️ Print</button>
+      <div id="error" style="color: red;"></div>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheet"></div>
+
+  <script>
+    function generateSheet() {
+      // Fixed A4 dimensions
+      const pageWidth = 210; // mm
+      const pageHeight = 297; // mm
+
+      // Get input values
+      const labelHeight = parseFloat(document.getElementById('labelHeight').value);
+      const labelWidth = parseFloat(document.getElementById('labelWidth').value);
+      const numAcross = parseInt(document.getElementById('numAcross').value);
+      const numDown = parseInt(document.getElementById('numDown').value);
+      const topMargin = parseFloat(document.getElementById('topMargin').value);
+      const sideMargin = parseFloat(document.getElementById('sideMargin').value);
+      const bottomMargin = parseFloat(document.getElementById('bottomMargin').value);
+      const verticalPitch = parseFloat(document.getElementById('verticalPitch').value);
+      const horizontalPitch = parseFloat(document.getElementById('horizontalPitch').value);
+      const labelName = document.getElementById('labelName').value;
+      const totalLabels = numAcross * numDown;
+      const sheet = document.getElementById('sheet');
+      const errorDiv = document.getElementById('error');
+
+      // Update page title
+      document.title = `A4 (${labelName}) Address Label (${labelWidth}mm x ${labelHeight}mm x ${totalLabels})`;
+
+      // Calculate total dimensions
+      const totalWidth = (labelWidth * numAcross) + ((horizontalPitch - labelWidth) * (numAcross - 1)) + sideMargin;
+      const labelsHeight = (labelHeight * numDown) + ((verticalPitch - labelHeight) * (numDown - 1));
+      const totalHeight = labelsHeight + topMargin + bottomMargin;
+
+      // Check if dimensions fit within A4
+      if (totalWidth > pageWidth || totalHeight > pageHeight) {
+        errorDiv.textContent = `Error: Label dimensions (${totalWidth.toFixed(1)}mm × ${totalHeight.toFixed(1)}mm) exceed A4 size (${pageWidth}mm × ${pageHeight}mm). Adjust values and try again.`;
+        sheet.innerHTML = '';
+        return;
+      } else {
+        errorDiv.textContent = '';
+      }
+
+      // Set sheet styles
+      sheet.style.margin = `${topMargin}mm 0 ${bottomMargin}mm ${sideMargin}mm`;
+      sheet.style.gridTemplateColumns = `repeat(${numAcross}, ${labelWidth}mm)`;
+      sheet.style.gridTemplateRows = `repeat(${numDown}, ${labelHeight}mm)`;
+      sheet.style.columnGap = `${horizontalPitch - labelWidth}mm`;
+      sheet.style.rowGap = `${verticalPitch - labelHeight}mm`;
+
+      // Clear existing labels
+      sheet.innerHTML = '';
+
+      // Generate labels
+      for (let i = 0; i < totalLabels; i++) {
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'label';
+        
+        const img = document.createElement('img');
+        img.id = `img${i}`;
+        
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.className = 'upload-input';
+        input.onchange = (event) => loadImage(event, i);
+        
+        labelDiv.appendChild(img);
+        labelDiv.appendChild(input);
+        sheet.appendChild(labelDiv);
+      }
+
+      // Trigger upload all if files are already selected
+      const uploadAllInput = document.getElementById('uploadAll');
+      if (uploadAllInput.files.length > 0) {
+        loadAllImages({ target: uploadAllInput });
+      }
+    }
+
+    function loadImage(event, index) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById(`img${index}`).src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function loadAllImages(event) {
+      const files = event.target.files;
+      const totalLabels = parseInt(document.getElementById('numAcross').value) * parseInt(document.getElementById('numDown').value);
+      
+      for (let i = 0; i < Math.min(files.length, totalLabels); i++) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById(`img${i}`).src = e.target.result;
+        };
+        reader.readAsDataURL(files[i]);
+      }
+    }
+
+    // Add event listener for upload all
+    document.getElementById('uploadAll').addEventListener('change', loadAllImages);
+
+    // Generate initial sheet on page load
+    window.onload = generateSheet;
+  </script>
+</body>
+</html>
