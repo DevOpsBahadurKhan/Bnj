@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Clock</title>
+  <style>
+    .clock {
+      font-size: 3rem;
+      font-family: monospace;
+      text-align: center;
+      margin-top: 20%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <h4 class="mb-3">📄 Pagination Example</h4>
+    <ul id="list" class="list-group mb-3"></ul>
+
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-secondary" onclick="prevPage()">⬅ Prev</button>
+      <span id="page-info"></span>
+      <button class="btn btn-secondary" onclick="nextPage()">Next ➡</button>
+    </div>
+  </div>
+
+  <script>
+
+    function debounce(func, delay) {
+      let timeoutId;
+      return function (...args) {
+        clearTimeout(timeoutId); // purana timeout hatao
+        timeoutId = setTimeout(() => {
+          func.apply(this, args); // naye delay ke baad function call karo
+        }, delay);
+      }
+    }
+
+    function throttle(func, delay) {
+      let last = 0;
+      return function (...args) {
+        let now = Date.now();
+        // agar abhi ka time aur last call ke time ka farak 'delay' se zyada hai
+        if (now - last >= delay) {
+          // ab function chal sakta hai, to last update karo
+          last = now;
+          last = now;
+          func.apply(this, args);
+        }
+      }
+    }
+
+
+    function handleScroll() {
+      console.log('Throttled scroll at', new Date().toLocaleTimeString());
+    }
+
+    window.addEventListener('scroll', debounce(handleScroll, 1000));
+
+
+    let products = [];
+    let page = 1;
+    const limit = 10;
+
+    async function loadUsers() {
+      let res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      products = await res.json();
+      render();
+    }
+
+    function render() {
+      let skip = (page - 1) * limit;
+      let pageData = products.slice(skip, skip + limit);
+
+      const list = document.getElementById("list");
+      list.innerHTML = pageData.map(post =>
+        `<li class="list-group-item"><strong>${post.title}</strong><br>${post.body}</li>`
+      ).join("");
+
+      document.getElementById("page-info").innerText = `Page ${page} of ${Math.ceil(products.length / limit)}`;
+    }
+
+    function nextPage() {
+      if (page * limit < products.length) {
+        page++;
+        render();
+      }
+    }
+
+    function prevPage() {
+      if (page > 1) {
+        page--;
+        render();
+      }
+    }
+
+    loadUsers();
+
+
+
+
+    
+
+  </script>
+</body>
+
+</html>

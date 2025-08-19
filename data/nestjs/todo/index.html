@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+
+    <title>To Do List</title>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="text-dark"><strong>To do List</strong></h1>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="addNewTask" placeholder="Add New Task" aria-label="Add New Task"
+                aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-danger" id="btnAddNewTask" type="button">New Task</button>
+            </div>
+        </div>
+        <div id="taskContainer">
+            <!-- list all task here -->
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;">
+        <div class="toast" id="emptyToast" data-delay="1000" style="background-color: antiquewhite; padding: 5px;">
+            <div class="toast-header">
+                <strong class="mr-auto text-danger">Warning</strong>
+                <small>Just now</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+            </div>
+            <div class="toast-body">
+                Task cannot be empty.
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        document.getElementById('btnAddNewTask').addEventListener('click', function () {
+            let task = document.getElementById('addNewTask').value.trim();
+            let id = '_' + Math.random(Math.floor()).toString().substring(9, 2);
+            addTask({ task, id });
+            document.getElementById('addNewTask').value = null;
+        });
+
+
+        function addTask(task) {
+            if (task.task === '') {
+                $('#emptyToast').toast('show');
+                return;
+            }
+            let existingtasks = JSON.parse(localStorage.getItem('task')) || [];
+            existingtasks.push(task);
+            localStorage.setItem('task', JSON.stringify(existingtasks));
+            listTask();
+        }
+
+        function listTask() {
+
+            let tasks = JSON.parse(localStorage.getItem('task')) || [];
+            let taskContainer = document.getElementById('taskContainer');
+
+            if (tasks.length >= 1) {
+                taskContainer.classList.add('taskContainer');
+            } else {
+                taskContainer.classList.remove('taskContainer');
+            }
+
+            taskContainer.innerHTML = ''; //remove old to refresh
+
+            tasks.forEach(item => {
+                let span = document.createElement('div');
+                span.innerHTML =
+                    `
+                            <div>
+                                <span>${item.task}</span>
+                                <span class="deleteBtn" onclick="removeTask('${item.id}')">delete</span>
+                            </div>
+                        `;
+
+                taskContainer.appendChild(span);
+
+            });
+
+
+        }
+
+
+        function removeTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('task')) || [];
+
+            let Tasksfiltered = tasks.filter((item) => String(item.id) !== String(id));
+            localStorage.setItem('task', JSON.stringify(Tasksfiltered));
+
+            listTask();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            listTask();
+        })
+    </script>
+
+
+    <!-- jQuery & Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <input type="date" id="appointment">
+
+    <script>
+        // Get today's date in the format YYYY-MM-DD
+        let today = new Date();
+        let low = today.toISOString().split('T')[0];
+        let high = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate() + 6}`;
+
+        // Set the minimum date for the input field
+        document.getElementById('appointment').min = low;
+        document.getElementById('appointment').max = high;
+
+    </script>
+
+</body>
+
+</html>

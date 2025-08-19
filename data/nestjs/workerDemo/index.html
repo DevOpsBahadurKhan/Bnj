@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <input id="num" oninput="checkPrimes()" placeholder="Enter a number..." />
+    <p id="output"></p>
+
+
+
+    <script>
+
+        const worker = new Worker("worker.js");
+
+        function checkPrimes() {
+            const num = document.getElementById("num").value;
+            worker.postMessage(num);
+        }
+
+        worker.onmessage = (e) => {
+            document.getElementById("output").textContent = e.data;
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,172 @@
+[
+    {
+        "id": 1,
+        "name": "Dr. A Sharma",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Orthopedic",
+        "availableDays": [
+            "Monday",
+            "Wednesday",
+            "Friday"
+        ],
+        "slots": [
+            "10:00 AM",
+            "11:00 AM",
+            "12:00 PM"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Dr. B Khan",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Cardiologist",
+        "availableDays": [
+            "Tuesday",
+            "Thursday"
+        ],
+        "slots": [
+            "2:00 PM",
+            "3:00 PM"
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Dr. C Mehta",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Neurologist",
+        "availableDays": [
+            "Monday",
+            "Thursday"
+        ],
+        "slots": [
+            "9:00 AM",
+            "10:30 AM"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Dr. D Kapoor",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Pediatrician",
+        "availableDays": [
+            "Wednesday",
+            "Saturday"
+        ],
+        "slots": [
+            "11:00 AM",
+            "1:00 PM"
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Dr. E Verma",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Dermatologist",
+        "availableDays": [
+            "Tuesday",
+            "Friday"
+        ],
+        "slots": [
+            "12:00 PM",
+            "2:00 PM"
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Dr. F Raza",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "ENT Specialist",
+        "availableDays": [
+            "Monday",
+            "Thursday"
+        ],
+        "slots": [
+            "10:00 AM",
+            "1:00 PM"
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Dr. G Sen",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "General Physician",
+        "availableDays": [
+            "Tuesday",
+            "Saturday"
+        ],
+        "slots": [
+            "9:30 AM",
+            "11:30 AM"
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Dr. H Tripathi",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Psychiatrist",
+        "availableDays": [
+            "Monday",
+            "Wednesday"
+        ],
+        "slots": [
+            "1:00 PM",
+            "3:00 PM"
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Dr. I Joshi",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Oncologist",
+        "availableDays": [
+            "Thursday",
+            "Friday"
+        ],
+        "slots": [
+            "2:00 PM",
+            "4:00 PM"
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Dr. J Nair",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Nephrologist",
+        "availableDays": [
+            "Tuesday",
+            "Thursday"
+        ],
+        "slots": [
+            "11:00 AM",
+            "12:30 PM"
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Dr. K Desai",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Urologist",
+        "availableDays": [
+            "Wednesday",
+            "Saturday"
+        ],
+        "slots": [
+            "3:00 PM",
+            "5:00 PM"
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Dr. L Banerjee",
+        "image": "https://bonenjoint.in/images/doctors/czAZF4jqv4phDSvrrS4KUUeBC6JiMRUxKq192mxe.jpg",
+        "specialty": "Pulmonologist",
+        "availableDays": [
+            "Monday",
+            "Friday"
+        ],
+        "slots": [
+            "10:00 AM",
+            "12:00 PM"
+        ]
+    }
+]

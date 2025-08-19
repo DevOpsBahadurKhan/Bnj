@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Efficient Color Palette Viewer</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #viewport {
+      height: 100vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    #scroller {
+      position: relative;
+    }
+
+    .colorCard {
+      height: 200px;
+      width: 200px;
+      border-radius: 10px;
+      color: white;
+      font-family: monospace;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-align: center;
+      text-shadow: 1px 1px 2px #000;
+      transition: transform 0.2s ease;
+    }
+
+    .colorCard:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="viewport">
+    <div id="scroller" class="container-fluid"></div>
+  </div>
+
+  <!-- Toast for Copy Feedback -->
+  <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;">
+    <div class="toast" id="copyToast" data-delay="2000">
+      <div class="toast-body">Color copied!</div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    const TOTAL_COLORS = 500000;
+    const ROW_HEIGHT = 180;
+    const CARDS_PER_ROW = 6;
+    const BUFFER_ROWS = 5;
+    const VIEWPORT_HEIGHT = window.innerHeight;
+
+    const viewport = document.getElementById("viewport");
+    const scroller = document.getElementById("scroller");
+    const renderedRows = new Map();
+    const colorPalette = [];
+    
+    let workerReady = false;
+
+    // Set scroller height to simulate full content
+    const totalRows = Math.ceil(TOTAL_COLORS / CARDS_PER_ROW);
+    scroller.style.height = `${totalRows * ROW_HEIGHT}px`;
+
+    // Initialize worker
+    const worker = new Worker("colorWorker.js");
+    let ct = 0;
+    worker.postMessage({ total: TOTAL_COLORS });
+    worker.onmessage = function (e) {
+      if (e) {
+
+        ct += 1;
+      }
+      console.log(ct);
+
+      colorPalette.push(...e.data.colors);
+      if (!workerReady && colorPalette.length >= 1000) {
+        workerReady = true;
+        renderVisibleRows();
+      }
+      if (e.data.done) {
+        worker.terminate(); // Clean up worker when done
+      }
+    };
+
+    function debounce(fn, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+
+    function renderVisibleRows() {
+      if (!workerReady) return;
+
+      const scrollTop = viewport.scrollTop;
+      const startRow = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT));
+      const endRow = Math.min(totalRows, Math.ceil((scrollTop + VIEWPORT_HEIGHT) / ROW_HEIGHT) + BUFFER_ROWS);
+
+      // Remove rows outside the visible range
+      for (const [rowIndex] of renderedRows) {
+        if (rowIndex < startRow - BUFFER_ROWS || rowIndex > endRow) {
+          const row = scroller.querySelector(`[data-row="${rowIndex}"]`);
+          if (row) row.remove();
+          renderedRows.delete(rowIndex);
+        }
+      }
+
+      // Render new rows
+      for (let rowIndex = startRow; rowIndex < endRow; rowIndex++) {
+        if (renderedRows.has(rowIndex) || rowIndex * CARDS_PER_ROW >= colorPalette.length) continue;
+
+        const row = document.createElement("div");
+        row.className = "row no-gutters";
+        row.dataset.row = rowIndex;
+        row.style.position = "absolute";
+        row.style.top = `${rowIndex * ROW_HEIGHT}px`;
+
+        for (let colIndex = 0; colIndex < CARDS_PER_ROW; colIndex++) {
+          const colorIndex = rowIndex * CARDS_PER_ROW + colIndex;
+          if (!colorPalette[colorIndex]) continue;
+
+          const col = document.createElement("div");
+          col.className = "col-6 col-md-4 col-lg-2 p-2";
+
+          const card = document.createElement("div");
+          card.className = "colorCard card shadow-sm";
+          card.dataset.index = colorIndex;
+          card.style.background = colorPalette[colorIndex];
+          card.textContent = colorPalette[colorIndex].toUpperCase(); // Display hex in uppercase
+
+          col.appendChild(card);
+          row.appendChild(col);
+        }
+
+        scroller.appendChild(row);
+        renderedRows.set(rowIndex, true);
+      }
+    }
+
+    viewport.addEventListener("scroll", debounce(renderVisibleRows, 100));
+
+    scroller.addEventListener("click", (e) => {
+      const card = e.target.closest(".colorCard");
+      if (!card) return;
+      const index = card.dataset.index;
+      const color = colorPalette[Number(index)];
+      if (color) pickColor(color);
+    });
+
+    function showToast(message) {
+      const toastEl = document.getElementById("copyToast");
+      toastEl.querySelector(".toast-body").textContent = message;
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+    }
+
+    async function pickColor(color) {
+      try {
+        await navigator.clipboard.writeText(color);
+        showToast("Copied: " + color);
+      } catch (err) {
+        showToast("Failed to copy");
+        console.error(err);
+      }
+    }
+
+    // Initial render
+    renderVisibleRows();
+  </script>
+</body>
+
+</html>

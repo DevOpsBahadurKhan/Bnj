@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #calculator {
+            width: 281px;
+            margin: 50px auto;
+            padding: 10px;
+            background-color: #222;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #444;
+            text-align: center;
+        }
+
+        #display {
+            height: 50px;
+            background-color: #000;
+            color: #0f0;
+            font-size: 24px;
+            line-height: 50px;
+            text-align: right;
+            padding: 0 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        button.btn {
+            width: 55px;
+            height: 50px;
+            margin: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #444;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.btn:hover {
+            background-color: #666;
+        }
+
+        button.btn:active {
+            background-color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="calculator">
+        <div id="display"></div>
+    </div>
+
+
+
+    <script>
+
+        let keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '00', '+', '-', '*', '/', '⌫', '%', 'C', 'CE', '='];
+        for (let index = 0; index < keys.length; index++) {
+            const key = keys[index];
+            let btn = document.createElement('button');
+            btn.classList.add('btn');
+            btn.textContent = key;
+            document.getElementById('calculator').appendChild(btn);
+        }
+
+
+
+        document.getElementById('calculator').addEventListener('click', function (e) {
+            if (e.target.classList.contains('btn')) { //Event Delegation
+                const value = e.target.textContent;
+                handleClick(value);
+            }
+        });
+
+        let expression = '';
+
+        function handleClick(val) {
+            if (val === 'C') {
+                expression = '';
+            }
+            else if (val === '⌫') {
+                expression = expression.slice(0, -1);
+            }
+            else if (val === 'CE') {
+                // Remove last number or operator
+                expression = expression.trim().replace(/[\d.]+$|[^0-9]$/, '');
+            }
+            else if (val === '=') {
+                try {
+                    expression = eval(expression).toString();
+                } catch (e) {
+                    if (e) {
+                        expression = "";
+                    }
+                }
+            } else {
+                expression += val;
+            }
+
+            document.getElementById('display').textContent = expression;
+        }
+
+
+
+    </script>
+</body>
+
+</html>

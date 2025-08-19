@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "rootDir": "src",          // 📌 Where source .ts files are
+    "outDir": "dist",          // 📦 Where .js files will go
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],     // ✅ Include all subfolders
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",         // Node.js ke liye module system
+    "rootDir": "./src",            // TS files ka location
+    "outDir": "./dist",            // JS output kaha aaye
+    "strict": true,                // Strict type-checking
+    "esModuleInterop": true,       // Import commonjs modules easily
+    "skipLibCheck": true           // lib files ko ignore kare errors mein
+  },
+    "include": ["src/**/*"],          // Kin folders ko compile karna hai
+  "exclude": ["node_modules"]      // Kin folders ko ignore karna hai
+}

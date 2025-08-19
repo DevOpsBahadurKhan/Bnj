@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Appointment Summary</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card-summary {
+            max-width: 600px;
+            margin: 3rem auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">🏥 BnJ Hospital</a>
+        </div>
+    </nav>
+
+    <!-- Summary Card -->
+    <div class="container">
+        <div class="card card-summary shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Appointment Confirmed</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Thank you! Your appointment has been booked successfully.</p>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Doctor:</strong> <span id="doctorName">Dr. A Sharma</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Specialty:</strong> <span id="specialty">Orthopedic</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Day:</strong> <span id="day">Wednesday</span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Time:</strong> <span id="time">11:00 AM</span>
+                    </li>
+                </ul>
+
+                <div class="text-center mt-4">
+                    <a href="index.html" class="btn btn-outline-primary">Book Another</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- (Optional) JS to Populate Summary -->
+    <script>
+
+        let appointedDoctor = JSON.parse(localStorage.getItem('appointment'));
+
+        document.getElementById('doctorName').textContent = appointedDoctor.doctorName;
+        document.getElementById('specialty').textContent = appointedDoctor.specialty;
+        document.getElementById('day').textContent = appointedDoctor.day;
+        document.getElementById('time').textContent = appointedDoctor.time;
+    </script>
+</body>
+
+</html>

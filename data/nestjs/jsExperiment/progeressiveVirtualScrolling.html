@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Progressive Virtual Scroll</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f5f5f5;
+    }
+
+    #container {
+      height: 600px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .job-card {
+      height: 120px;
+      margin-bottom: 1rem;
+      transition: box-shadow 0.2s;
+    }
+
+    .job-card:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .job-image {
+      width: 70px;
+      height: 70px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 0.5rem;
+    }
+
+    #status {
+      text-align: center;
+      padding: 10px;
+      color: #888;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #eee, #f5f5f5, #eee);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite linear;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container py-4">
+    <h4 class="mb-3">🔁 Progressive Virtual Scroll</h4>
+    <div id="container"></div>
+    <div id="status">Loading...</div>
+  </div>
+
+  <script>
+    const container = document.getElementById("container");
+    const status = document.getElementById("status");
+
+    const rowHeight = 130;
+    const buffer = 5;
+    const pageSize = 20;
+
+    let loadedData = [];
+    let skip = 0;
+    let isLoading = false;
+    let hasMore = true;
+
+    async function fetchMoreData() {
+      if (isLoading || !hasMore) return;
+
+      isLoading = true;
+      status.innerText = "Loading...";
+
+      try {
+        const res = await fetch(`https://dummyjson.com/products?limit=${pageSize}&skip=${skip}`);
+        const json = await res.json();
+
+        if (json.products.length === 0) {
+          hasMore = false;
+          status.innerText = "No more data.";
+          return;
+        }
+
+        loadedData = [...loadedData, ...json.products];
+        skip += pageSize;
+        isLoading = false;
+        render();
+      } catch (error) {
+        console.error("Fetch error:", error);
+        status.innerText = "Failed to load data.";
+        isLoading = false;
+      }
+    }
+
+    function render() {
+      const scrollTop = container.scrollTop;
+      const containerHeight = container.clientHeight;
+      const totalHeight = loadedData.length * rowHeight;
+
+      const startIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - buffer);
+      const endIndex = Math.min(
+        loadedData.length,
+        Math.ceil((scrollTop + containerHeight) / rowHeight) + buffer
+      );
+
+      const offsetY = startIndex * rowHeight;
+      const visibleData = loadedData.slice(startIndex, endIndex);
+
+      // Build HTML
+      const topSpacer = `<div style="height:${offsetY}px;"></div>`;
+      const bottomSpacer = `<div style="height:${Math.max(0, totalHeight - endIndex * rowHeight)}px;"></div>`;
+      const jobCards = visibleData
+        .map(
+          (item) => `
+          <div class="card job-card p-3 d-flex flex-row align-items-center">
+            <div class="job-image me-3" style="background-image: url('${item.thumbnail}')"></div>
+            <div class="flex-grow-1">
+              <h5 class="mb-1">${item.title}</h5>
+              <div class="text-muted">${item.brand}</div>
+              <small>💲 ${item.price} | 🏷️ ${item.category}</small>
+            </div>
+            <button class="btn btn-outline-primary">Apply</button>
+          </div>
+        `
+        )
+        .join("");
+
+      container.innerHTML = topSpacer + jobCards + bottomSpacer;
+
+      // Fetch more if near end
+      if (scrollTop + containerHeight >= totalHeight - 400) {
+        fetchMoreData();
+      }
+    }
+
+    // Debounce scroll event to prevent over-triggering
+    let scrollTimeout = null;
+    container.addEventListener("scroll", () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        render();
+      }, 50);
+    });
+
+    fetchMoreData(); // Initial load
+  </script>
+</body>
+
+</html>

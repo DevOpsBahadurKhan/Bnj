@@ -1,0 +1,43 @@
+.btn {
+    width: 50px;
+    height: 30px;
+    border: 1px solid #393c45;
+    background-color: #000000b0;
+    border-radius: 3px;
+    margin: 3px;
+    color: white;
+    font-size: larger;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+/* Hover effect */
+button:hover {
+    background-color: #1a1a1a;
+}
+
+/* Click (active) effect */
+button:active {
+    background-color: #2c2c2c;
+    transform: scale(0.95);
+}
+
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+input {
+    width: 226px;
+    height: 120px;
+    border-radius: 5px;
+    font-size: xx-large;
+    border: 1px solid #000000;
+}
+
+.clear {
+    width: 230px;
+}

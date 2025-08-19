@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Appointment Slot</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .btn.active {
+      background-color: #198754 !important;
+      color: white !important;
+      border-color: #198754 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">🏥 BnJ Hospital</a>
+    </div>
+  </nav>
+
+  <div class="container my-4">
+
+    <h3 class="mb-4">Select a Slot</h3>
+    <div class="DoctorCard">
+    </div>
+
+
+    <!-- Slot Calendar -->
+    <div id="slotCalendar" class="row g-3 mt-4"></div>
+
+    <button class="btn btn-success" id="confirmBtn" disabled>Confirm Appointment</button>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Script -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const doctorId = parseInt(params.get("doctorId"));
+
+    // fetch data
+    async function fetchDoctors() {
+      let res = await fetch('doctors.json');
+      let doctors = await res.json();
+      display(doctors)
+    }
+
+    function display(doctors) {
+      const doctor = doctors.find(d => d.id === doctorId);
+      if (!doctor) return;
+
+      const container = document.querySelector('.DoctorCard');
+
+      // Doctor card
+      const cardHTML = `
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+            <div class="card shadow h-100">
+              <img src="${doctor.image}" class="card-img-top" alt="${doctor.name}" style="height: 220px; object-fit: cover;" />
+              <div class="card-body">
+                <h5 class="card-title">${doctor.name}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">${doctor.specialty}</h6>
+                <p class="card-text">Available Days: ${doctor.availableDays.join(', ')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      container.innerHTML = cardHTML;
+
+      const slotGrid = document.getElementById("slotCalendar");
+      const slots = generateSlots();
+      let selectedSlot = null;
+      let selectedDay = null;
+
+      // Loop over availableDays
+      doctor.availableDays.forEach(day => {
+        const col = document.createElement("div");
+        col.className = "col-md-6 col-lg-4";
+
+        const card = document.createElement("div");
+        card.className = "card shadow-sm h-100";
+
+        const body = document.createElement("div");
+        body.className = "card-body";
+
+        const title = document.createElement("h5");
+        title.textContent = day;
+        body.appendChild(title);
+
+        const slotWrap = document.createElement("div");
+        slotWrap.className = "d-flex flex-wrap gap-2 mt-3";
+
+        slots.forEach(slot => {
+          const btn = document.createElement("button");
+          btn.className = "btn btn-outline-primary btn-sm";
+          btn.textContent = slot;
+
+          btn.onclick = () => {
+            // Unselect all buttons
+            document.querySelectorAll('#slotCalendar button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSlot = slot;
+            selectedDay = day;
+            document.getElementById("confirmBtn").disabled = false;
+          };
+
+          slotWrap.appendChild(btn);
+        });
+
+        body.appendChild(slotWrap);
+        card.appendChild(body);
+        col.appendChild(card);
+        slotGrid.appendChild(col);
+      });
+
+      document.getElementById("confirmBtn").addEventListener("click", () => {
+        const appointment = {
+          doctorName: doctor.name,
+          specialty: doctor.specialty,
+          day: selectedDay,
+          time: selectedSlot
+        };
+        localStorage.setItem("appointment", JSON.stringify(appointment));
+        window.location.href = "appointment.html";
+      });
+    }
+
+    fetchDoctors()
+
+
+    function generateSlots() {
+      const startTime = '09:00 am';
+      const endTime = '6:30 pm';
+      const duration = 30; // in minutes
+
+      const slots = [];
+      const parseTime = (timeStr) => {
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':').map(Number);
+
+        if (modifier === 'pm' && hours !== 12) hours += 12;
+        if (modifier === 'am' && hours === 12) hours = 0;
+
+        return new Date(0, 0, 0, hours, minutes);
+      };
+
+      const formatTime = (date) => {
+        let hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'pm' : 'am';
+
+        hours = hours % 12;
+        hours = hours ? hours : 12; // 0 becomes 12
+
+        return `${hours}:${minutes} ${ampm}`;
+      };
+
+      let current = parseTime(startTime);
+      const end = parseTime(endTime);
+
+      while (current < end) {
+        const slotStart = new Date(current);
+        current.setMinutes(current.getMinutes() + duration);
+        const slotEnd = new Date(current);
+        if (slotEnd > end) break;
+
+        slots.push(`${formatTime(slotStart)} - ${formatTime(slotEnd)}`);
+      }
+
+      return slots;
+    }
+
+    // Example usage:
+    console.log(generateSlots());
+
+
+  </script>
+</body>
+
+</html>

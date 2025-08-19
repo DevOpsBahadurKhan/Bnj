@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clousers</title>
+    <style>
+        .spanStyle {
+            display: flex;
+            justify-content: center;
+            background-color: rgb(49, 50, 50);
+            color: white;
+            font-size: larger;
+            border: 1px solid rgb(47, 45, 45);
+            border-radius: 5px;
+            margin-top: 5px;
+            width: 200px;
+
+        }
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: 0.3s ease;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+        }
+    </style>
+</head>
+
+<body id="google_translate_element">
+
+    <div id="counterContainer">
+        <button type="button" class="counter" onclick="counter('INC')">INC</button>
+        <button type="button" class="counter" onclick="counter('DEC')">DEC</button>
+        <button type="button" class="counter" onclick="counter('RESET')">RESET</button>
+        <span id="count"></span>
+    </div>
+
+    <button onclick="togleTheme()">Change Theme</button>
+
+
+  
+
+    <script>
+        // let count = 0;
+        // let createCounter = function () {
+        //     return {
+
+        //         INC: function () {
+        //             count++
+        //             return count;
+        //         },
+        //         DEC: function () {
+        //             count--
+        //             return count;
+        //         },
+        //         RESET: function () {
+        //             count = 0;
+        //             return count;
+        //         }
+
+        //     }
+        // }
+        // let counter = createCounter();
+
+
+        // document.getElementById('counterContainer').addEventListener('click', function (e) {
+        //     if (e.target.classList.contains('counter')) {
+        //         if (e.target.textContent == 'INC') {
+        //             document.getElementById('count').innerText = counter.INC();
+        //         } else if (e.target.textContent == 'DEC') {
+        //             document.getElementById('count').innerText = counter.DEC();
+        //         } else {
+        //             document.getElementById('count').innerText = counter.RESET();
+        //         }
+        //     }
+        // });
+
+        let count = 0;
+        let hasCounter = false;
+
+        function counter(args) {
+            if (args === 'INC') {
+                count++;
+            } else if (args === 'DEC') {
+                if (count > 0) {
+                    count--;
+                }
+                if (count < 1) {
+                    hasCounter = true;
+                }
+
+            } else {
+                count = 0;
+                hasCounter = true;
+            }
+
+
+            let span = document.createElement('span');
+            span.textContent = "Loading...";
+            span.classList.add('spanStyle');
+
+            let countContainer = document.getElementById('count');
+            countContainer.textContent = count;
+            countContainer.appendChild(span);
+
+            if (hasCounter) {
+                span.classList.remove('spanStyle');
+                countContainer.innerText = null
+                hasCounter = false;
+            }
+        }
+
+
+        function togleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+
+
+
+    </script>
+
+</body>
+
+
+</html>

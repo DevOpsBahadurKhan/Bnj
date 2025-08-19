@@ -1,0 +1,39 @@
+ .taskContainer {
+     background: #f8f9fa;
+     padding: 13px;
+     font-weight: 500;
+     border: 1x solid blue;
+     border-radius: 5px;
+ }
+
+
+ #taskContainer div div {
+     display: flex;
+     justify-content: space-between;
+     background-color: aliceblue;
+     margin: 8px;
+     padding: 5px;
+     border-radius: 5px;
+     border: 1px solid rgb(17, 17, 188);
+
+ }
+
+ .deleteBtn {
+     background: #fc7171;
+     color: #ffffff;
+     position: 10;
+     border-radius: 7px;
+     padding: 2px 8px;
+     cursor: pointer;
+ }
+
+ .container {
+     height: 100vh;
+     background-color: rgba(255, 191, 122, 0.786);
+ }
+
+ .btn-danger {
+    color: #fff;
+    background-color: #0056b3;
+    border-color: #80bdff;
+}
